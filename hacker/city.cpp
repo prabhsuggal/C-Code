@@ -9,13 +9,13 @@ typedef struct parent{
 int find(subset par[],int a){
     if(par[a].parent!=a)
         par[a].parent = find(par,par[a].parent);
-    return par[a].parent;
+    return par[a].parent
 }
 
 void Union(int x,int y,subset subsets[],long *edges,long int* lib){
     int xroot = find(subsets,x);
     int yroot = find(subsets,y);
-    
+
     if(subsets[xroot].rank<subsets[yroot].rank)
         subsets[xroot].parent=yroot;
     else if(subsets[xroot].rank>subsets[yroot].rank)
@@ -29,7 +29,7 @@ void Union(int x,int y,subset subsets[],long *edges,long int* lib){
 }
 // Complete the roadsAndLibraries function below.
 long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int> > cities) {
-    
+
 
     subset arr[n+1];
     for(int i=0;i<n+1;i++){
