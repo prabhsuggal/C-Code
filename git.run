@@ -1,3 +1,4 @@
+#!/bin/bash
 # Specify the files to be backed up.
 # Below command will backup everything inside the project folder
 git add .
