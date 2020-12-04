@@ -11,8 +11,8 @@ int main(){
 #endif
 
     int num;
-    int sum, sumAbove, sumBelow;
-    float money;
+    int sum, sumAbove, sumBelow, dollar, cent;
+    char temp;
 
     while(true){
         cin >> num;
@@ -23,8 +23,8 @@ int main(){
         sumBelow=0;
         vector<int> students(num);
         for(int i=0; i<num; i++){
-            cin >> money;
-            students[i] = money*100;
+            cin >> dollar >> temp >> cent;
+            students[i] = dollar*100 + cent;
             sum+=students[i];
         }
         int lowAverage = sum / num;
@@ -44,7 +44,6 @@ int main(){
         }
         
         int usedSum = max(sumAbove, sumBelow);
-        
         
         cout << '$' << (usedSum / 100) << '.' << setw(2) << setfill('0') << (usedSum % 100) << '\n';
     }
