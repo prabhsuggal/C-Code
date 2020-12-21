@@ -7,12 +7,32 @@ bool comp(const pair<int, vector<int> > &a, const pair<int, vector<int> > &b){
     return (a.first < b.first);
 }
 
-bool validate(vector<char> perm, string &a, string &b){
+bool uniqueKeyVal(vector<char> &perm){
+    unordered_set<char> t;
+    for(int i=0; i<perm.size(); i++){
+        if(perm[i]){
+            if(t.find(perm[i]) == t.end()){
+                t.insert(perm[i]);
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool validate(vector<char> &perm, string &a, string &b){
     unordered_map<char, char> tmp_map;
     for(int i=0; i<b.size(); i++){
         if(tmp_map.find(b[i]) == tmp_map.end()){
             if(perm[b[i]-'a']){
-                tmp_map[b[i]] = perm[b[i]-'a'];
+                if(perm[b[i]-'a'] == a[i]){
+                    tmp_map[b[i]] = perm[b[i]-'a'];
+                }
+                else{
+                    return false;
+                }
             }
             else{
                 tmp_map[b[i]] = a[i];
@@ -28,18 +48,30 @@ bool validate(vector<char> perm, string &a, string &b){
     if(tmp != a)
         return false;
 
+    vector<char> temp_perm = perm;
+     
     for(int i=0; i<b.size(); i++){
-        perm[b[i]-'a'] = tmp_map[b[i]];
+        temp_perm[b[i]-'a'] = tmp_map[b[i]];
     }
 
+    if(uniqueKeyVal(temp_perm)){
+        for(int i=0; i<b.size(); i++){
+            perm[b[i]-'a'] = tmp_map[b[i]];
+        }
+    }
+    else{
+        return false;
+    }
     return true;
 }
 
 void print_garbage(vector<string> &key){
-    for(int i=1; i<key.size(); i++){
-        cout << " ";
+    for(int i=0; i<key.size(); i++){
         for(int j=0; j< key[i].size(); j++){
             cout<<"*";
+        }
+        if(i < key.size()-1){
+            cout<<" ";
         }
     }
     cout <<"\n";
@@ -50,13 +82,11 @@ void print_key(vector<char> &perm, vector<string> &key){
         for(int j=0; j<key[i].size(); j++){
             cout << perm[key[i][j]-'a'];
         }
-        if(i == key.size()){
-            cout << "\n";
-        }
-        else{
+        if(i < key.size()-1){
             cout << " ";
         }
     }
+    cout << "\n";
     return;
 }
 
@@ -73,9 +103,8 @@ bool match(vector<int> &a, vector<int> &b){
 }
 
 bool decrypt(vector<string> &key, vector<string> &dict, 
-            int idx, unordered_set<string> &mapper, vector<char> perm){
+            int idx, unordered_set<string> &mapper, vector<char>& perm){
     while(idx < key.size() && mapper.find(key[idx]) != mapper.end()){
-        cout << idx << endl;
         idx++;
     }
     if(idx == key.size()){
@@ -93,6 +122,7 @@ bool decrypt(vector<string> &key, vector<string> &dict,
             if(rv){
                 return rv;
             }
+            mapper.erase(key[idx]);
             perm = parent_perm;
         }
     }
